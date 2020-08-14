@@ -1,5 +1,9 @@
 
-Private Sub Workbook_Opena()
+Private Sub Workbook_BeforeClose(Cancel As Boolean)
+    Application.ThisWorkbook.Saved = True
+End Sub
+
+Private Sub Workbook_Open()
     Dim alias As String
     Dim Ret As Variant
     
