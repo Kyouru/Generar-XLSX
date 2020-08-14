@@ -1017,7 +1017,7 @@ Public Sub btPichinchaAr_Click()
 
     Dim X As Variant
     Dim Path As String
-    Path = ActiveWorkbook.Path & Application.PathSeparator & "Pichincha Arturo\Tarjeta.exe"
+    Path = ThisWorkbook.Sheets("L").Range("XLSX_PATH") & Application.PathSeparator & "Pichincha Arturo\Tarjeta.exe"
     Application.WindowState = xlMinimized
     
     On Error Resume Next
