@@ -515,6 +515,8 @@ Public Sub btCarga_Click()
                         End If
                         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                         
+                        registrarCarga id_param_cuenta, nombre_corto, numero_corto, fileDate
+                        
                         'Compartir el xlsx
                         If [COMPARTIR_XLSX] = "SI" Then
                             wb.SaveAs Filename:=ThisWorkbook.Sheets("L").Range("XLSX_PATH") & Format(Now(), "YYYY") & "\" & Format(Now(), "MM") & "\" & Format(Now(), "YYYY.MM.DD") & "\" & strUltimaCarga, FileFormat:=xlOpenXMLWorkbook
@@ -1317,4 +1319,6 @@ Private Sub cbActualizar_Click()
         On Error GoTo 0
     End If
 End Sub
+
+
 
