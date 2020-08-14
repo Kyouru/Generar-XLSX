@@ -478,7 +478,7 @@ Public Sub btCarga_Click()
                                     ultimaFila = False
                                     If rng(i, CInt(glosa)) = "COMIS. TRASPASO O/P BANCA AUTOMATIC" Or _
                                     rng(i, CInt(glosa)) = "COMISION DEPOSITO O/P" Then
-                                        rng(i).EntireRow.Delete
+                                        rng(i, 1).EntireRow.Delete
                                     End If
                                 End If
                                 i = i - 1
