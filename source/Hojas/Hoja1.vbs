@@ -299,17 +299,17 @@ Public Sub btCarga_Click()
                         
                         'Nuevo formato IBK 2020-08-07
                         If [FORMATO_IBK] = "SI" Then
-                            If wb.Sheets(1).Cells(13, 3) = "Fecha de operaci" And _
+                            If wb.Sheets(1).Cells(13, 3) = "Fecha de operación" And _
                                 wb.Sheets(1).Cells(13, 6) = "Fecha de proceso" And _
-                                wb.Sheets(1).Cells(13, 11) = "Nro. de operaci" And _
+                                wb.Sheets(1).Cells(13, 11) = "Nro. de operación" And _
                                 wb.Sheets(1).Cells(13, 14) = "Movimiento" And _
-                                wb.Sheets(1).Cells(13, 18) = "Descripci" And _
+                                wb.Sheets(1).Cells(13, 18) = "Descripción" And _
                                 wb.Sheets(1).Cells(13, 23) = "Canal" And _
                                 wb.Sheets(1).Cells(13, 26) = "Cargo" And _
                                 wb.Sheets(1).Cells(13, 32) = "Abono" Then
                                 Dim premonto As String
                                 i = inicio_row
-                                Workbooks.Open (ThisWorkbook.Path & Application.PathSeparator & "Template IBK.xlsx")
+                                Workbooks.Open (ThisWorkbook.Sheets("L").Range("XLSX_PATH") & Application.PathSeparator & "Template IBK.xlsx")
                                 Set wb2 = Workbooks("Template IBK.xlsx")
                                 If wb.Sheets(1).Cells(8, 7) = "Corriente Soles 041-3000106330" Then
                                     'MsgBox "Formato IBK OK"
@@ -371,7 +371,7 @@ Public Sub btCarga_Click()
                                     wb2.Sheets(1).Cells(10, 1) = "Cuenta:  Cuenta Corriente Soles 041-3000106330"
                                     premonto = "S/"
                                     
-                                ElseIf wb.Sheets(1).Cells(8, 7) = "Corriente Dares 041-3000106347" Then
+                                ElseIf wb.Sheets(1).Cells(8, 7) = "Corriente Dólares 041-3000106347" Then
                                     wb2.Sheets(1).Cells(10, 1) = "Cuenta:  Cuenta Corriente Soles 041-3000106347"
                                     premonto = "US$"
                                 End If
@@ -640,7 +640,7 @@ Sub cargarMovimientos(wb As Workbook, _
             If nroOpe = "" Then
                 nroOpe = "NULL"
             Else
-                nroOpe = Replace("'" & nroOpe & "'", "", "")
+                nroOpe = Replace("'" & nroOpe & "'", " ", "")
             End If
         
             tmpGlosa = Replace(tmpGlosa, "'", "''")
@@ -651,13 +651,13 @@ Sub cargarMovimientos(wb As Workbook, _
             End If
             
             If monto2 <> 0 Then
-                If wb.Sheets(1).Cells(inicio_row + j, inicio_col + monto - 1) <> 0 And IsNumeric(Replace(Replace(Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + monto - 1), "S/", ""), "US$", ""), "", "")) Then
-                    importe = Replace(Replace(Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + monto - 1), "S/", ""), "US$", ""), "", "") * (-1)
+                If wb.Sheets(1).Cells(inicio_row + j, inicio_col + monto - 1) <> 0 And IsNumeric(Replace(Replace(Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + monto - 1), "S/", ""), "US$", ""), " ", "")) Then
+                    importe = Replace(Replace(Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + monto - 1), "S/", ""), "US$", ""), " ", "") * (-1)
                 Else
-                    importe = Replace(Replace(Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + monto2 - 1), "S/", ""), "US$", ""), "", "")
+                    importe = Replace(Replace(Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + monto2 - 1), "S/", ""), "US$", ""), " ", "")
                 End If
             Else
-                importe = Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + monto - 1), "", "")
+                importe = Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + monto - 1), " ", "")
             End If
             
             strSQL = "SELECT * FROM MOVIMIENTO WHERE ID_CUENTA_FK = " & id_cuenta & " AND GLOSA = " & tmpGlosa & " AND NUMERO_OPERACION = " & nroOpe & " AND FECHA_MOVIMIENTO = #" & Format(wb.Sheets(1).Cells(inicio_row + j, inicio_col + fecha_movimiento - 1), "YYYY-MM-DD") & "# AND MONTO = " & importe
@@ -769,11 +769,11 @@ Sub cargarMovimientos(wb As Workbook, _
         End If
         
         If itf > 0 Then
-            If Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + itf - 1), "", "") <> 0 Then
+            If Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + itf - 1), " ", "") <> 0 Then
                  strSQL = "INSERT INTO MOVIMIENTO " & _
                     "(ID_CUENTA_FK, MONTO, ID_TIPO_MOVIMIENTO_FK, GLOSA, NUMERO_OPERACION, FECHA_MOVIMIENTO, HORA_MOVIMIENTO, ANULADO, FECHA_GENERADO, USUARIO) VALUES " & _
                     "(" & id_cuenta & ", " & _
-                    Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + itf - 1), "", "") & ", " & _
+                    Replace(wb.Sheets(1).Cells(inicio_row + j, inicio_col + itf - 1), " ", "") & ", " & _
                     "2, " & _
                     tmpGlosa & ", " & _
                     nroOpe & ", " & _
@@ -1140,7 +1140,7 @@ Private Sub btRegistrarHistorico_Click()
                 Workbooks.Open (strDir)
                 Set wb = Workbooks(Me.Range("dataSet")(i, 1).Value & ".xlsx")
             Else
-                MsgBox "Error: No se encontr・el XLSX" & vbCrLf & " >> Ruta: " & strDir
+                MsgBox "Error: No se encontró el XLSX" & vbCrLf & " >> Ruta: " & strDir
             End If
             
             strSQL = "SELECT * FROM PARAM_CUENTA LEFT JOIN PARAM_CAMPO ON PARAM_CUENTA.ID_PARAM_CUENTA = PARAM_CAMPO.ID_PARAM_CUENTA_FK WHERE INSTR('" & Me.Range("dataSet")(i, 1).Value & "', NOMBRE_CORTO + ' ' + NUMERO_CORTO)"
